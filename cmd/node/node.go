@@ -6,16 +6,16 @@
 package main
 
 import (
-	"github.com/ipfs/go-ipfs/shell/ipfs"
+	"github.com/ETHFSx/go-ipfs/shell/ipfs"
 	"os"
 	"runtime"
 
-	"github.com/nilhost/ipfs/nilfs/common/config"
+	"github.com/ETHFSx/ethfs/common/config"
 	"github.com/urfave/cli"
 )
 
 func startEthfs()  {
-	ipfs.MainStart()
+	ipfs.MainStart("daemon")
 }
 
 func setupAPP() *cli.App {
