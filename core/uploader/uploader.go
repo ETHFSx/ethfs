@@ -33,7 +33,7 @@ type UploadParams struct {
 	ServiceDuration    uint32
 	MinSLARequirements int
 	UploadPmt          uint64 // bid in marketplace, defaults to flat payment
-	ArchonFilepath     string
+	EthfsFilepath     string
 	Filesize           uint64
 	Shardsize          uint64
 	FileContainerType  uint8
@@ -75,8 +75,8 @@ func ProposeUpload(params *UploadParams) (txid string, err error) {
 	if err_scAbi != nil {
 		return "", err_scAbi
 	}
-	bArchonFilepath := []byte(params.ArchonFilepath)
-	hashedArchonFilepath := ethcrypto.Keccak256(bArchonFilepath[:])
+	bEthfsFilepath := []byte(params.EthfsFilepath)
+	hashedEthfsFilepath := ethcrypto.Keccak256(bEthfsFilepath[:])
 	proposeUploadParams := encodings.ProposeUploadParams{
 		ServiceDuration:     params.ServiceDuration,
 		MinSLARequirements:  params.MinSLARequirements,
@@ -95,9 +95,9 @@ func ProposeUpload(params *UploadParams) (txid string, err error) {
 	if ep_err != nil {
 		return "", ep_err
 	}
-	var bHashedArchonFilepath [32]byte
-	copy(bHashedArchonFilepath[:], hashedArchonFilepath[0:32])
-	args := encodings.ArchonSCArgs{HashedArchonFilepath: bHashedArchonFilepath,
+	var bHashedEthfsFilepath [32]byte
+	copy(bHashedEthfsFilepath[:], hashedEthfsFilepath[0:32])
+	args := encodings.EthfsSCArgs{HashedEthfsFilepath: bHashedEthfsFilepath,
 		ContainerSignature: params.ContainerSignature,
 		Params:             encodedParams,
 		Shardsize:          params.Shardsize,

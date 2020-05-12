@@ -8,12 +8,12 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi"
 )
 
-type ArchonSCArgs struct {
+type EthfsSCArgs struct {
 	Params               [32]byte
 	NodeID               [32]byte
 	HardwareProof        [32]byte
 	Address              [20]byte
-	HashedArchonFilepath [32]byte
+	HashedEthfsFilepath [32]byte
 	ContainerSignature   [ethcrypto.SignatureLength]byte
 	Shardsize            uint64
 	SPsToUploadTo        [][20]byte
@@ -21,7 +21,7 @@ type ArchonSCArgs struct {
 	PublicKey            [64]byte
 }
 
-func FormatData(abi abi.ABI, methodName string, args ArchonSCArgs) (ret []byte, err error) {
+func FormatData(abi abi.ABI, methodName string, args EthfsSCArgs) (ret []byte, err error) {
 	if methodName == "registerSP" {
 		packedData, err_packedData := abi.Pack(methodName,
 			args.Params,
@@ -49,7 +49,7 @@ func FormatData(abi abi.ABI, methodName string, args ArchonSCArgs) (ret []byte, 
 		copy(containerSignatureS[:], args.ContainerSignature[32:64])
 		// note: V is stashed in param encoding
 		packedData, err_packedData := abi.Pack(methodName,
-			args.HashedArchonFilepath,
+			args.HashedEthfsFilepath,
 			containerSignatureR,
 			containerSignatureS,
 			args.Params,

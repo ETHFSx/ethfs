@@ -25,11 +25,11 @@ import (
 )
 
 type InputDeconstruct struct {
-	HashedArchonFilepath [32]byte
+	HashedEthfsFilepath [32]byte
 	ContainerSignature   [ethcrypto.SignatureLength]byte
 	Params               encodings.ProposeUploadParams
 	Shardsize            uint64
-	ArchonSPs            [][20]byte
+	EthfsSPs            [][20]byte
 }
 
 type UploadTx struct {
@@ -133,8 +133,8 @@ func GetUploadTx(txHash [32]byte) (uploadTx UploadTx, err error) {
 		Gas:         data.Gas,
 		GasPrice:    data.GasPrice,
 		Hash:        data.Hash,
-		InputDeconstructed: InputDeconstruct{ArchonSPs: pv.ArchonSPs,
-			HashedArchonFilepath: pv.HashedArchonFilepath,
+		InputDeconstructed: InputDeconstruct{EthfsSPs: pv.EthfsSPs,
+			HashedEthfsFilepath: pv.HashedEthfsFilepath,
 			Params:               decoded,
 			ContainerSignature:   containerSignature,
 			Shardsize:            pv.Shardsize},
@@ -200,12 +200,12 @@ func checkUploadRpcCalls(txHash [32]byte) (res GetTxByHashResult, err error) {
 }
 
 type ProposeUploadArgs struct {
-	HashedArchonFilepath [32]byte
+	HashedEthfsFilepath [32]byte
 	ContainerSignatureR  [32]byte
 	ContainerSignatureS  [32]byte
 	Params               [32]byte
 	Shardsize            uint64
-	ArchonSPs            [][20]byte
+	EthfsSPs            [][20]byte
 }
 
 func Unpack(methodName string, input []byte) (inter interface{}, err error) {
@@ -214,10 +214,10 @@ func Unpack(methodName string, input []byte) (inter interface{}, err error) {
 			type Empty struct{}
 			return new(Empty), fmt.Errorf("This method cannot be unpacked")
 		}
-		var hashedArchonFilepath [32]byte
+		var hashedEthfsFilepath [32]byte
 		var containerSignatureR, containerSignatureS [32]byte
 		var params [32]byte
-		copy(hashedArchonFilepath[0:32], input[0:32])
+		copy(hashedEthfsFilepath[0:32], input[0:32])
 		copy(containerSignatureR[0:32], input[32:64])
 		copy(containerSignatureS[0:32], input[(2*32):(3*32)])
 		copy(params[0:32], input[(3*32):(4*32)])
@@ -235,12 +235,12 @@ func Unpack(methodName string, input []byte) (inter interface{}, err error) {
 			ethfsSPs = append(ethfsSPs, ethfsSP)
 			idx++
 		}
-		ret := ProposeUploadArgs{HashedArchonFilepath: hashedArchonFilepath,
+		ret := ProposeUploadArgs{HashedEthfsFilepath: hashedEthfsFilepath,
 			ContainerSignatureR: containerSignatureR,
 			ContainerSignatureS: containerSignatureS,
 			Params:              params,
 			Shardsize:           shardsize,
-			ArchonSPs:           ethfsSPs}
+			EthfsSPs:           ethfsSPs}
 		return ret, nil
 	}
 	type Empty struct{}
