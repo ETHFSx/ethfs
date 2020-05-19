@@ -6,16 +6,27 @@
 package main
 
 import (
+	"fmt"
 	"github.com/ETHFSx/go-ipfs/shell/ipfs"
 	"os"
 	"runtime"
 
-	"github.com/ETHFSx/ethfs/common/config"
+	"github.com/Yihen/ethfs/common/config"
 	"github.com/urfave/cli"
+	"github.com/Yihen/ethfs/rpc/jsonrpc"
 )
 
-func startEthfs()  {
-	ipfs.MainStart("daemon")
+func startRPCServer() {
+	if err:=jsonrpc.StartRPCServer();err!=nil{
+		fmt.Println("start rpc server error:",err.Error())
+	}
+}
+
+func startEthfs(ctx *cli.Context) {
+	config.InitConfig()
+	go ipfs.MainStart("daemon")
+	go startRPCServer()
+	select {}
 }
 
 func setupAPP() *cli.App {

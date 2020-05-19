@@ -17,7 +17,7 @@
  */
 
 // Package rpc privides functions to for rpc server call
-package rpc
+package base
 
 import (
 	"encoding/json"
@@ -28,7 +28,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ETHFSx/ethfs/common/log"
+	"github.com/Yihen/ethfs/common/log"
 )
 
 func init() {

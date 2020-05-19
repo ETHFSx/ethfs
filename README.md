@@ -21,7 +21,7 @@ ETHFSX will help a large number of applications and websites that need or even r
 
 1. Download source code
 
-   >  git clone https://github.com/ETHFSx/ethfs.git
+   >  git clone https://github.com/Yihen/ethfs.git
 
 2. Compile
 

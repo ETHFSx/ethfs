@@ -1,7 +1,7 @@
 package utils
 
 import (
-	ethfsAbi "github.com/ETHFSx/ethfs/account/abi"
+	ethfsAbi "github.com/Yihen/ethfs/account/abi"
 )
 
 var g_ethRpc = ethfsAbi.Rpc()

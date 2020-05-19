@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 
-	ethfsAbi "github.com/ETHFSx/ethfs/account/abi"
+	ethfsAbi "github.com/Yihen/ethfs/account/abi"
 )
 
 func SetRpcUrl(r []string) error {

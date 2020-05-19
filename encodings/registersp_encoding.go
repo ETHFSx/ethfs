@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ETHFSx/ethfs/account/wallet"
+	"github.com/Yihen/ethfs/account/wallet"
 
 	"github.com/pariz/gountries"
 )

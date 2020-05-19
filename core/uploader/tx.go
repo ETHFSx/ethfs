@@ -18,8 +18,8 @@ import (
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/rlp"
 
-	ethfsAbi "github.com/ETHFSx/ethfs/account/abi"
-	"github.com/ETHFSx/ethfs/encodings"
+	ethfsAbi "github.com/Yihen/ethfs/account/abi"
+	"github.com/Yihen/ethfs/encodings"
 
 	"golang.org/x/crypto/sha3"
 )

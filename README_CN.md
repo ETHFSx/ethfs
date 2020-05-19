@@ -20,7 +20,7 @@ ETHFSX将会帮助大量需要甚至依赖数据文件存储应用及网站带�
 
 1. 获得ethfsx源码
 
-   >  git clone https://github.com/ETHFSx/ethfs.git
+   >  git clone https://github.com/Yihen/ethfs.git
 
 2. 编译
 

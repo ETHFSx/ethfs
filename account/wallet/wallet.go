@@ -21,7 +21,7 @@ import (
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	ethparams "github.com/ethereum/go-ethereum/params"
 
-	ethfsAbi "github.com/ETHFSx/ethfs/account/abi"
+	ethfsAbi "github.com/Yihen/ethfs/account/abi"
 
 	"github.com/pborman/uuid"
 )

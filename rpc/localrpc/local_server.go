@@ -6,8 +6,8 @@ import (
 
 	"fmt"
 
-	cfg "github.com/ETHFSx/ethfs/common/config"
-	"github.com/ETHFSx/ethfs/common/log"
+	cfg "github.com/Yihen/ethfs/common/config"
+	"github.com/Yihen/ethfs/common/log"
 )
 
 const (

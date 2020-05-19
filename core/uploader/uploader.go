@@ -11,10 +11,10 @@ import (
 	"github.com/ethereum/go-ethereum/core/types" //NewTransaction
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 
-	ethfsAbi "github.com/ETHFSx/ethfs/account/abi"
-	"github.com/ETHFSx/ethfs/account/wallet"
-	"github.com/ETHFSx/ethfs/encodings"
-	"github.com/ETHFSx/ethfs/rpc/utils"
+	ethfsAbi "github.com/Yihen/ethfs/account/abi"
+	"github.com/Yihen/ethfs/account/wallet"
+	"github.com/Yihen/ethfs/encodings"
+	"github.com/Yihen/ethfs/rpc/utils"
 )
 
 var g_chainID int64 = ethfsAbi.ChainID()

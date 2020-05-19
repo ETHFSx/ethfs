@@ -11,7 +11,7 @@ help:          ## Show available options with this Makefile
 
 .PHONY: build
 build: clean
-	$(GC) -o ./bin/nilfs cmd/node/node.go
+	$(GC) -o ./bin/ethfs cmd/node/node.go
 
 .PHONY: glide
 glide:   ## Installs glide for go package management
@@ -23,7 +23,7 @@ vendor: glide.yaml glide.lock
 
 .PHONY: clean
 clean:
-	rm -rf ./bin/nilfs
+	rm -rf ./bin/ethfs
 	rm -rf build/
 	rm -rf *.log
 

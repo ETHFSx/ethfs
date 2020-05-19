@@ -45,6 +45,7 @@ type Configuration struct {
 	PubKey          string        `json:"PubKey"`
 	LogDir          string        `json:"LogDir"`
 	LogLevel        int           `json:"LogLevel"`
+	HttpJsonPort	uint16 		  `json:"HttpJsonPort"`
 }
 
 type ConfigFile struct {

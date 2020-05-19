@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	ethfsAbi "github.com/ETHFSx/ethfs/account/abi"
+	ethfsAbi "github.com/Yihen/ethfs/account/abi"
 )
 
 type LogsResponse struct {

@@ -1,6 +1,6 @@
 package uploader
 
-import "github.com/ETHFSx/ethfs/core/basic"
+import "github.com/Yihen/ethfs/core/basic"
 
 // Note this is designed for registerSP and proposeUpload tx only. Other txs
 // will not necessarily return correct bool.
