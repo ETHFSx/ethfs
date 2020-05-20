@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/ETHFSx/go-ipfs/shell"
+
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -33,7 +35,7 @@ type UploadParams struct {
 	ServiceDuration    uint32
 	MinSLARequirements int
 	UploadPmt          uint64 // bid in marketplace, defaults to flat payment
-	EthfsFilepath     string
+	EthfsFilepath      string
 	Filesize           uint64
 	Shardsize          uint64
 	FileContainerType  uint8
@@ -146,4 +148,15 @@ func ProposeUpload(params *UploadParams) (txid string, err error) {
 		return "", tx_err
 	}
 	return txid, nil
+}
+
+func DoUpload(path string, copyNum uint32) error {
+	sh := shell.NewLocalShell()
+	err := sh.Push(path, copyNum, false)
+	if err != nil {
+		fmt.Println("push err:", err.Error())
+	} else {
+		fmt.Println("success to push:", path)
+	}
+	return err
 }

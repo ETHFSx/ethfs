@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/Yihen/ethfs/core/basic"
 	"io/ioutil"
 	"math/big"
 	"net/http"
@@ -78,7 +79,7 @@ func GetUploadTx(txHash [32]byte) (uploadTx UploadTx, err error) {
 		}
 		var bAddress2 [20]byte
 		copy(bAddress2[0:20], bAddress[0:20])
-		username, err_username := GetUsernameFromContract(bAddress2)
+		username, err_username := basic.GetUsernameFromContract(bAddress2)
 		if err_username != nil {
 			var empty [32]byte
 			encodedUsernameMessage <- empty

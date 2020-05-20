@@ -345,6 +345,7 @@ github.com/ipfs/go-graphsync v0.0.5 h1:5U9iC58JgYfUSZI55oRXe22Cj6Ln0Xjd5VF4Eoo3f
 github.com/ipfs/go-graphsync v0.0.5/go.mod h1:SGKa4rVgCCz3KDNqe38wLEDYFa/PUF6w/ertGSQk33I=
 github.com/ipfs/go-ipfs v0.5.1 h1:Imx8or636fKipbTStGzPOl0reXQxMDncYVpaL/ptw8E=
 github.com/ipfs/go-ipfs v0.5.1/go.mod h1:RK9c4yJwQFRDUvcz8yRJJjKXK+yPwY3P9eM8eQvG468=
+github.com/ipfs/go-ipfs-api v0.0.3 h1:1XZBfVDGj0GyyO5WItLrz2opCwezIm9LfFcBfe+sRxM=
 github.com/ipfs/go-ipfs-api v0.0.3/go.mod h1:EgBqlEzrA22SnNKq4tcP2GDPKxbfF+uRTd2YFmR1uUk=
 github.com/ipfs/go-ipfs-blockstore v0.0.1/go.mod h1:d3WClOmRQKFnJ0Jz/jj/zmksX0ma1gROTlovZKBmN08=
 github.com/ipfs/go-ipfs-blockstore v0.1.0/go.mod h1:5aD0AvHPi7mZc6Ci1WCAhiBQu2IsfTduLl+422H6Rqw=
@@ -608,6 +609,7 @@ github.com/libp2p/go-libp2p-loggables v0.0.1/go.mod h1:lDipDlBNYbpyqyPX/KcoO+eq0
 github.com/libp2p/go-libp2p-loggables v0.1.0 h1:h3w8QFfCt2UJl/0/NW4K829HX/0S4KD31PQ7m8UXXO8=
 github.com/libp2p/go-libp2p-loggables v0.1.0/go.mod h1:EyumB2Y6PrYjr55Q3/tiJ/o3xoDasoRYM7nOzEpoa90=
 github.com/libp2p/go-libp2p-metrics v0.0.1/go.mod h1:jQJ95SXXA/K1VZi13h52WZMa9ja78zjyy5rspMsC/08=
+github.com/libp2p/go-libp2p-metrics v0.1.0 h1:v7YMUTHNobFaQeqaMfJJMbnK3EPlZeb6/KFm4gE9dks=
 github.com/libp2p/go-libp2p-metrics v0.1.0/go.mod h1:rpoJmXWFxnj7qs5sJ02sxSzrhaZvpqBn8GCG6Sx6E1k=
 github.com/libp2p/go-libp2p-mplex v0.1.1/go.mod h1:KUQWpGkCzfV7UIpi8SKsAVxyBgz1c9R5EvxgnwLsb/I=
 github.com/libp2p/go-libp2p-mplex v0.2.0/go.mod h1:Ejl9IyjvXJ0T9iqUTE1jpYATQ9NM3g+OtR+EMMODbKo=
