@@ -7,18 +7,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/ETHFSx/go-ipfs/shell/ipfs"
 	"os"
 	"runtime"
 
+	"github.com/Yihen/ethfs/cmd/commands/utils"
+
+	"github.com/ETHFSx/go-ipfs/shell/ipfs"
+	"github.com/Yihen/ethfs/cmd/commands"
+
 	"github.com/Yihen/ethfs/common/config"
-	"github.com/urfave/cli"
 	"github.com/Yihen/ethfs/rpc/jsonrpc"
+	"github.com/urfave/cli"
 )
 
 func startRPCServer() {
-	if err:=jsonrpc.StartRPCServer();err!=nil{
-		fmt.Println("start rpc server error:",err.Error())
+	if err := jsonrpc.StartRPCServer(); err != nil {
+		fmt.Println("start rpc server error:", err.Error())
 	}
 }
 
@@ -36,8 +40,13 @@ func setupAPP() *cli.App {
 	app.Version = config.Version
 	app.Copyright = "Copyright in 2020 The ETHFS Authors"
 	app.Commands = []cli.Command{
+		commands.DataCommand,
 	}
 	app.Flags = []cli.Flag{
+		utils.RPCPortFlag,
+		utils.CopyNumFlag,
+		utils.HashFlag,
+		utils.PathFlag,
 	}
 	app.Before = func(context *cli.Context) error {
 		runtime.GOMAXPROCS(runtime.NumCPU())

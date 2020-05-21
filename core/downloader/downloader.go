@@ -17,7 +17,7 @@ func DoDownload(hash string) error {
 	if err != nil {
 		fmt.Println("err:", err.Error())
 	} else {
-		fmt.Println("success to download:QmbPAjTuQ5wwH8qqomWY9EaTsCmp2j1KbkopV6FWHrKqwH")
+		fmt.Println("success to download:", hash)
 	}
 	return nil
 }
