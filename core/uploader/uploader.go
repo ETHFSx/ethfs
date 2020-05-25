@@ -1,6 +1,7 @@
 package uploader
 
 import (
+	"errors"
 	"fmt"
 	"math/big"
 
@@ -151,6 +152,9 @@ func ProposeUpload(params *UploadParams) (txid string, err error) {
 }
 
 func DoUpload(path string, copyNum uint32) error {
+	if path == "" || copyNum < 1 {
+		return errors.New("param value is error")
+	}
 	sh := shell.NewLocalShell()
 	err := sh.Push(path, copyNum, false)
 	if err != nil {

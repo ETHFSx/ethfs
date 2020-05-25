@@ -1,5 +1,5 @@
-English | [中文](README_CN.md)
-#### Background
+English | [中文](README_CN.md) ![](https://img.shields.io/badge/status-wip-orange.svg?style=flat-square)
+####  Background
 
 The extended communication and data storage network based on the DSP protocol aims to provide a stable and safe file storage network for the DApp of the ETH network. DSP Group hopes to help the ETH network with a rich application ecosystem to provide a stable, safe, efficient and economical data file storage network.
 

@@ -1,4 +1,4 @@
-#### 背景
+#### 背景 ![](https://img.shields.io/badge/status-wip-orange.svg?style=flat-square)
 
 ETHFSX是基于DSP协议的扩展通讯和数据存储网络，目的是为ETH网络的DApp提供稳定安全的文件存储网络。DSP Group希望能帮助拥有丰富应用生态的ETH网络提供稳定，安全，高效，经济的数据文件存储网络。
 

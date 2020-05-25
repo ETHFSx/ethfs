@@ -20,7 +20,7 @@ var (
 	PathFlag = cli.StringFlag{
 		Name:  "path",
 		Usage: "uploading file path",
-		Value: "./",
+		Value: "",
 	}
 	CopyNumFlag = cli.UintFlag{
 		Name:  "copynum",

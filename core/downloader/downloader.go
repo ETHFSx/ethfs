@@ -6,12 +6,16 @@
 package downloader
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/ETHFSx/go-ipfs/shell"
 )
 
 func DoDownload(hash string) error {
+	if hash == "" {
+		return errors.New("param:hash value is empty")
+	}
 	sh := shell.NewLocalShell()
 	err := sh.Get(hash, "./")
 	if err != nil {

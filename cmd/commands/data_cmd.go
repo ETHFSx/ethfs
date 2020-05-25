@@ -8,6 +8,12 @@ package commands
 import (
 	"fmt"
 
+	"github.com/Yihen/ethfs/core/downloader"
+
+	"github.com/Yihen/ethfs/core/uploader"
+
+	"github.com/ETHFSx/go-ipfs/shell/ipfs"
+
 	"github.com/Yihen/ethfs/cmd/commands/utils"
 
 	"github.com/urfave/cli"
@@ -46,12 +52,19 @@ func doUpload(ctx *cli.Context) error {
 	path := ctx.String(utils.GetFlagName(utils.PathFlag))
 	copyNum := ctx.Uint(utils.GetFlagName(utils.CopyNumFlag))
 	fmt.Println("do upload in commands:", path, copyNum)
+	go ipfs.MainStart("daemon")
+	if err := uploader.DoUpload(path, uint32(copyNum)); err != nil {
+		fmt.Println("upload err:", err, ",path:", path, ",copy number:", copyNum)
+	}
 	return nil
 }
 
 func doDownload(ctx *cli.Context) error {
 	hash := ctx.String(utils.GetFlagName(utils.HashFlag))
 	fmt.Println("do download commands:", hash)
-
+	go ipfs.MainStart("daemon")
+	if err := downloader.DoDownload(hash); err != nil {
+		fmt.Println("download err:", err, " ,hash:", hash)
+	}
 	return nil
 }
