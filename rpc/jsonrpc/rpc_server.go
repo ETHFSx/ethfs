@@ -1,9 +1,10 @@
 package jsonrpc
 
 import (
-	"github.com/Yihen/ethfs/rpc/handler"
 	"net/http"
 	"strconv"
+
+	"github.com/Yihen/ethfs/rpc/handler"
 
 	"fmt"
 
@@ -15,8 +16,10 @@ import (
 func StartRPCServer() error {
 	log.Debug()
 	http.HandleFunc("/", base.Handle)
-	base.HandleFunc("download",handler.DownloadData)
-	base.HandleFunc("upload",handler.UploadData)
+	base.HandleFunc("download", handler.DownloadData)
+	base.HandleFunc("upload", handler.UploadData)
+	base.HandleFunc("withdraw", handler.WithdrawToken)
+	base.HandleFunc("pledge", handler.PledgeToken)
 	//rpc.HandleFunc("getsysstatusscore", rpc.GetSysStatusScore)
 	err := http.ListenAndServe(config.Parameters.PublicIP+":"+strconv.Itoa(int(config.Parameters.HttpJsonPort)), nil)
 	if err != nil {

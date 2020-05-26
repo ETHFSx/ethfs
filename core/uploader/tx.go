@@ -4,16 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/Yihen/ethfs/core/basic"
 	"io/ioutil"
 	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
@@ -27,9 +24,9 @@ import (
 
 type InputDeconstruct struct {
 	HashedEthfsFilepath [32]byte
-	ContainerSignature   [ethcrypto.SignatureLength]byte
-	Params               encodings.ProposeUploadParams
-	Shardsize            uint64
+	ContainerSignature  [ethcrypto.SignatureLength]byte
+	Params              encodings.ProposeUploadParams
+	Shardsize           uint64
 	EthfsSPs            [][20]byte
 }
 
@@ -51,106 +48,6 @@ type UploadTx struct {
 	AmountPaid         string
 	PublicKey          [64]byte
 	UsernameCompressed [32]byte
-}
-
-// Called by sp. When uploader sends shards (and associated txid)
-// to an sp, the sp checks the data and validity of the tx associated
-// with the txid
-func GetUploadTx(txHash [32]byte) (uploadTx UploadTx, err error) {
-	var wg sync.WaitGroup
-	// make rpc call(s)
-	data, err_data := checkUploadRpcCalls(txHash)
-	if err_data != nil {
-		return *new(UploadTx), err_data
-	}
-	if len(data.Hash) == 0 {
-		return *new(UploadTx), fmt.Errorf("GetUploadTx error: tx doesn't exist")
-	}
-	encodedUsernameMessage := make(chan [32]byte, 1)
-	encodedUsernameMessage_err := make(chan error, 1)
-	wg.Add(1)
-	go func(data GetTxByHashResult, wg *sync.WaitGroup) {
-		defer wg.Done()
-		address := strings.Replace(data.From, "0x", "", 1)
-		var bAddress []byte
-		for i := 0; i < len(address); i += 2 {
-			r, _ := hexutil.Decode("0x" + address[i:i+2])
-			bAddress = append(bAddress, []byte(r)...)
-		}
-		var bAddress2 [20]byte
-		copy(bAddress2[0:20], bAddress[0:20])
-		username, err_username := basic.GetUsernameFromContract(bAddress2)
-		if err_username != nil {
-			var empty [32]byte
-			encodedUsernameMessage <- empty
-			encodedUsernameMessage_err <- fmt.Errorf("GetUploadTx error: error getting username from contract")
-			return
-		}
-		encodedUsernameMessage <- username
-		encodedUsernameMessage_err <- nil
-		return
-	}(data, &wg)
-	r := strings.NewReader(ethfsAbi.Abi)
-	scAbi, err_scAbi := abi.JSON(r) // reader io.Reader
-	if err_scAbi != nil {
-		return *new(UploadTx), fmt.Errorf("GetUploadTx error: Abi file read error")
-	}
-	input := strings.Replace(data.Input, "0x", "", 1)
-	var bInput []byte
-	for i := 0; i < len(input); i += 2 {
-		r, _ := hexutil.Decode("0x" + input[i:i+2])
-		bInput = append(bInput, []byte(r)...)
-	}
-	var scMethodName string = "proposeUpload"
-	proposeUploadMethod := scAbi.Methods[scMethodName]
-	truncatedInput := bInput[len(proposeUploadMethod.ID()):]
-	v, err_unpack := Unpack(scMethodName, truncatedInput)
-	if err_unpack != nil {
-		return *new(UploadTx), fmt.Errorf("GetUploadTx error: Abi file read error")
-	}
-	pv, ok := v.(ProposeUploadArgs)
-	if !ok {
-		return *new(UploadTx), fmt.Errorf("GetUploadTx error: ProposeUpload data malformed")
-	}
-	decoded := encodings.DecodeProposeUploadParams(pv.Params)
-	var containerSignature [ethcrypto.SignatureLength]byte
-	copy(containerSignature[0:32], pv.ContainerSignatureR[:])
-	copy(containerSignature[32:64], pv.ContainerSignatureS[:])
-	containerSignature[64] = decoded.ContainerSignatureV
-	bPubKey, err_bPubKey := ECRecoverFromTx(data)
-	if err_bPubKey != nil {
-		return *new(UploadTx), err_bPubKey
-	}
-	wg.Wait()
-	err_usernameMessage := <-encodedUsernameMessage_err
-	if err_usernameMessage != nil {
-		return *new(UploadTx), err_usernameMessage
-	}
-
-	encodedUsername := <-encodedUsernameMessage
-	ret := UploadTx{BlockHash: data.BlockHash,
-		BlockNumber: data.BlockNumber,
-		From:        data.From,
-		Gas:         data.Gas,
-		GasPrice:    data.GasPrice,
-		Hash:        data.Hash,
-		InputDeconstructed: InputDeconstruct{EthfsSPs: pv.EthfsSPs,
-			HashedEthfsFilepath: pv.HashedEthfsFilepath,
-			Params:               decoded,
-			ContainerSignature:   containerSignature,
-			Shardsize:            pv.Shardsize},
-		Input:              data.Input,
-		Nonce:              data.Nonce,
-		R:                  data.R,
-		S:                  data.S,
-		To:                 data.To,
-		TransactionIndex:   data.TransactionIndex,
-		V:                  data.V,
-		AmountPaid:         data.Value,
-		PublicKey:          bPubKey,
-		UsernameCompressed: encodedUsername}
-
-	return ret, nil
 }
 
 type GetTxByHashResult struct {
@@ -202,10 +99,10 @@ func checkUploadRpcCalls(txHash [32]byte) (res GetTxByHashResult, err error) {
 
 type ProposeUploadArgs struct {
 	HashedEthfsFilepath [32]byte
-	ContainerSignatureR  [32]byte
-	ContainerSignatureS  [32]byte
-	Params               [32]byte
-	Shardsize            uint64
+	ContainerSignatureR [32]byte
+	ContainerSignatureS [32]byte
+	Params              [32]byte
+	Shardsize           uint64
 	EthfsSPs            [][20]byte
 }
 
@@ -241,7 +138,7 @@ func Unpack(methodName string, input []byte) (inter interface{}, err error) {
 			ContainerSignatureS: containerSignatureS,
 			Params:              params,
 			Shardsize:           shardsize,
-			EthfsSPs:           ethfsSPs}
+			EthfsSPs:            ethfsSPs}
 		return ret, nil
 	}
 	type Empty struct{}

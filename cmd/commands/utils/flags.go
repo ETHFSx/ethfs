@@ -32,6 +32,16 @@ var (
 		Usage: "hash value for downloading data file",
 		Value: "",
 	}
+	AddressFlag = cli.StringFlag{
+		Name:  "Address",
+		Usage: "wallet address",
+		Value: "",
+	}
+	AmountFlag = cli.UintFlag{
+		Name:  "Amount",
+		Usage: "amount for pledge or withdraw, some others.",
+		Value: 0,
+	}
 )
 
 //GetFlagName deal with short flag, and return the flag name whether flag name have short name

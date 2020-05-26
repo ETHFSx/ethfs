@@ -7,7 +7,8 @@ package downloader
 
 import (
 	"errors"
-	"fmt"
+
+	"github.com/Yihen/ethfs/common/log"
 
 	"github.com/ETHFSx/go-ipfs/shell"
 )
@@ -19,9 +20,9 @@ func DoDownload(hash string) error {
 	sh := shell.NewLocalShell()
 	err := sh.Get(hash, "./")
 	if err != nil {
-		fmt.Println("err:", err.Error())
+		log.Error("err:", err.Error())
 	} else {
-		fmt.Println("success to download:", hash)
+		log.Error("success to download:", hash)
 	}
 	return nil
 }

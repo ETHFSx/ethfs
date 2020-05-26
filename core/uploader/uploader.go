@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/Yihen/ethfs/common/log"
+
 	"github.com/ETHFSx/go-ipfs/shell"
 
 	"strings"
@@ -158,9 +160,9 @@ func DoUpload(path string, copyNum uint32) error {
 	sh := shell.NewLocalShell()
 	err := sh.Push(path, copyNum, false)
 	if err != nil {
-		fmt.Println("push err:", err.Error())
+		log.Error("push err:", err.Error())
 	} else {
-		fmt.Println("success to push:", path)
+		log.Error("success to push:", path)
 	}
 	return err
 }
