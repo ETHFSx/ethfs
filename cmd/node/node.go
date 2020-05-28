@@ -41,12 +41,15 @@ func setupAPP() *cli.App {
 	app.Copyright = "Copyright in 2020 The ETHFS Authors"
 	app.Commands = []cli.Command{
 		commands.DataCommand,
+		commands.TokenCommand,
 	}
 	app.Flags = []cli.Flag{
 		utils.RPCPortFlag,
 		utils.CopyNumFlag,
 		utils.HashFlag,
 		utils.PathFlag,
+		utils.AddressFlag,
+		utils.AmountFlag,
 	}
 	app.Before = func(context *cli.Context) error {
 		runtime.GOMAXPROCS(runtime.NumCPU())

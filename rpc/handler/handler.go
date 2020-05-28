@@ -34,7 +34,15 @@ func UploadData(params []interface{}) map[string]interface{} {
 			"result": "",
 		}
 	}
-	if err := uploader.DoUpload(path, copyNum); err != nil {
+	amount, ok := params[2].(uint32)
+	if !ok {
+		return map[string]interface{}{
+			"error":  20002,
+			"desc":   "params(copyNum) type is ERROR",
+			"result": "",
+		}
+	}
+	if err := uploader.DoUpload(path, copyNum, amount); err != nil {
 		return map[string]interface{}{
 			"error":  20003,
 			"desc":   "Download failed, path:" + path,

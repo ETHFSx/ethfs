@@ -33,6 +33,7 @@ var DataCommand = cli.Command{
 			Flags: []cli.Flag{
 				utils.PathFlag,
 				utils.CopyNumFlag,
+				utils.AmountFlag,
 			},
 		},
 		{
@@ -51,9 +52,10 @@ var DataCommand = cli.Command{
 func doUpload(ctx *cli.Context) error {
 	path := ctx.String(utils.GetFlagName(utils.PathFlag))
 	copyNum := ctx.Uint(utils.GetFlagName(utils.CopyNumFlag))
-	log.Info("do upload in commands:", path, copyNum)
+	amount := ctx.Uint(utils.GetFlagName(utils.AmountFlag))
+	log.Info("do upload in commands:", path, copyNum, amount)
 	go ipfs.MainStart("daemon")
-	if err := uploader.DoUpload(path, uint32(copyNum)); err != nil {
+	if err := uploader.DoUpload(path, uint32(copyNum), uint32(amount)); err != nil {
 		log.Info("upload err:", err, ",path:", path, ",copy number:", copyNum)
 	}
 	return nil
