@@ -8,7 +8,11 @@ package downloader
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
+
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
 
 	"github.com/ETHFSx/go-ipfs/shell"
 
@@ -25,12 +29,22 @@ func DoDownload(hash string) error {
 	if hash == "" {
 		return errors.New("in downloader, param:hash value is empty")
 	}
-	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), nil)
+
+	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	if err != nil {
+		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
+	}
+	auth, err := bind.NewTransactor(strings.NewReader("key"), "123")
+	if err != nil {
+		log.Fatalf("Failed to create authorized transactor: %v", err)
+	}
+
+	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), conn)
 	if err != nil {
 		log.Error("in downloaer, initialize new proof err:", err.Error())
 		return err
 	}
-	_, err = pdp.Challenge(nil, hash)
+	_, err = pdp.Challenge(auth, hash)
 	if err != nil {
 		log.Error("in download file, challenge error:", err.Error())
 		return err
@@ -40,7 +54,7 @@ func DoDownload(hash string) error {
 	for {
 		select {
 		case <-t.C:
-			tx, err := pdp.GetChallengeList(nil)
+			tx, err := pdp.GetChallengeList(auth)
 			// if challenge has been responsed, break else  do again in next time interval loop
 			if err != nil {
 				continue

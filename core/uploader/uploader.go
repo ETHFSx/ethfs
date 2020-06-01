@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
+
 	"github.com/Yihen/ethfs/common/constants"
 	"github.com/ethereum/go-ethereum/common"
 
@@ -162,7 +165,17 @@ func DoUpload(hash string, copyNum uint32, amount uint32) error {
 	if hash == "" || copyNum < 1 {
 		return errors.New("param value is error")
 	}
-	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), nil)
+
+	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	if err != nil {
+		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
+	}
+	auth, err := bind.NewTransactor(strings.NewReader("key"), "123")
+	if err != nil {
+		log.Fatalf("Failed to create authorized transactor: %v", err)
+	}
+
+	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), conn)
 	if err != nil {
 		log.Error("initialize new proof err:", err.Error())
 		return err
@@ -172,7 +185,7 @@ func DoUpload(hash string, copyNum uint32, amount uint32) error {
 	if err != nil {
 		log.Error("push err:", err.Error())
 	} else {
-		_, err = pdp.PledgeForFile(nil, amount, hash)
+		_, err = pdp.PledgeForFile(auth, amount, hash)
 		if err != nil {
 			log.Error("pledge for file error:", err.Error())
 		}

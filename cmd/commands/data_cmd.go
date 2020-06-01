@@ -56,7 +56,7 @@ func doUpload(ctx *cli.Context) error {
 	log.Info("do upload in commands:", path, copyNum, amount)
 	go ipfs.MainStart("daemon")
 	if err := uploader.DoUpload(path, uint32(copyNum), uint32(amount)); err != nil {
-		log.Info("upload err:", err, ",path:", path, ",copy number:", copyNum)
+		log.Error("upload err:", err, ",path:", path, ",copy number:", copyNum)
 	}
 	return nil
 }
