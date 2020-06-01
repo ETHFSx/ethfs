@@ -158,8 +158,8 @@ func ProposeUpload(params *UploadParams) (txid string, err error) {
 	return txid, nil
 }
 
-func DoUpload(path string, copyNum uint32, amount uint32) error {
-	if path == "" || copyNum < 1 {
+func DoUpload(hash string, copyNum uint32, amount uint32) error {
+	if hash == "" || copyNum < 1 {
 		return errors.New("param value is error")
 	}
 	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), nil)
@@ -168,15 +168,15 @@ func DoUpload(path string, copyNum uint32, amount uint32) error {
 		return err
 	}
 	sh := shell.NewLocalShell()
-	err = sh.Push(path, copyNum, false)
+	err = sh.Push(hash, copyNum, false)
 	if err != nil {
 		log.Error("push err:", err.Error())
 	} else {
-		_, err = pdp.PledgeForFile(nil, amount, [32]byte{})
+		_, err = pdp.PledgeForFile(nil, amount, hash)
 		if err != nil {
 			log.Error("pledge for file error:", err.Error())
 		}
-		log.Error("success to push:", path)
+		log.Error("success to push:", hash)
 	}
 	return err
 }
