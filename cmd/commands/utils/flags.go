@@ -37,6 +37,11 @@ var (
 		Usage: "wallet address",
 		Value: "",
 	}
+	PasswordFlag = cli.StringFlag{
+		Name:  "Password",
+		Usage: "account password",
+		Value: "",
+	}
 	AmountFlag = cli.UintFlag{
 		Name:  "Amount",
 		Usage: "amount for pledge or withdraw, some others.",

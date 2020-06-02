@@ -6,7 +6,15 @@
 package commands
 
 import (
+	"strings"
 	"time"
+
+	"github.com/ETHFSx/go-ipfs/shell"
+
+	"github.com/Yihen/ethfs/cmd/commands/utils"
+
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
 
 	"github.com/ETHFSx/go-ipfs/shell/ipfs"
 	proof "github.com/Yihen/contracts/dataproof/api"
@@ -21,25 +29,42 @@ var StartCommand = cli.Command{
 	Usage:       "./ethfs start",
 	Description: "start an ethfs node to response challenge of a file",
 	Action:      start,
-}
+	Flags: []cli.Flag{
+		utils.PasswordFlag,
+	}}
 
 const DefaultKeepaliveInterval = 15 * time.Second
 
-func doChallengeTask(pdp *proof.Proof) error {
-	tx, err := pdp.GetChallengeList(nil)
+func doChallengeTask(pdp *proof.Proof, opts *bind.TransactOpts) error {
+	tx, err := pdp.GetChallengeList(opts)
 	if err != nil {
 		log.Error("get challenge list err:", err.Error())
 		return err
 	}
-	tx.Data()
+	hash := common.Bytes2Hex(tx.Data())
+	sh := shell.NewLocalShell()
+	_, err = sh.Cat(hash)
+	if err != nil {
+		log.Errorf("cat file %s err:%s", hash, err.Error())
+		return err
+	}
 	return nil
 }
 
 func start(ctx *cli.Context) error {
+	password := ctx.String(utils.GetFlagName(utils.PasswordFlag))
 	if 0 != ipfs.MainStart("daemon") {
 		log.Error("start ipfs node ERROR")
 	}
-	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), nil)
+	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	if err != nil {
+		log.Fatalf("in withdraw, failed to connect to the Ethereum client: %v", err)
+	}
+	auth, err := bind.NewTransactor(strings.NewReader(constants.ACCOUNT_KEY), password)
+	if err != nil {
+		log.Fatalf("in withdraw, failed to create authorized transactor: %v", err)
+	}
+	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), conn)
 	if err != nil {
 		log.Error("initialize new proof err:", err.Error())
 		return err
@@ -50,7 +75,7 @@ func start(ctx *cli.Context) error {
 		for {
 			select {
 			case <-t.C:
-				if err != doChallengeTask(pdp) {
+				if err != doChallengeTask(pdp, auth) {
 					break
 				}
 			}

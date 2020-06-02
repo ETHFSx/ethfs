@@ -38,11 +38,19 @@ func UploadData(params []interface{}) map[string]interface{} {
 	if !ok {
 		return map[string]interface{}{
 			"error":  20002,
-			"desc":   "params(copyNum) type is ERROR",
+			"desc":   "params(amount) type is ERROR",
 			"result": "",
 		}
 	}
-	if err := uploader.DoUpload(path, copyNum, amount); err != nil {
+	pwd, ok := params[3].(string)
+	if !ok {
+		return map[string]interface{}{
+			"error":  20002,
+			"desc":   "params(pwd) type is ERROR",
+			"result": "",
+		}
+	}
+	if err := uploader.DoUpload(path, copyNum, amount, pwd); err != nil {
 		return map[string]interface{}{
 			"error":  20003,
 			"desc":   "Download failed, path:" + path,
@@ -68,11 +76,19 @@ func DownloadData(params []interface{}) map[string]interface{} {
 	if !ok {
 		return map[string]interface{}{
 			"error":  20002,
-			"desc":   "params type is ERROR",
+			"desc":   "params hash is ERROR",
 			"result": "",
 		}
 	}
-	if err := downloader.DoDownload(hash); err != nil {
+	pwd, ok := params[1].(string)
+	if !ok {
+		return map[string]interface{}{
+			"error":  20002,
+			"desc":   "params pwd is ERROR",
+			"result": "",
+		}
+	}
+	if err := downloader.DoDownload(hash, pwd); err != nil {
 		return map[string]interface{}{
 			"error":  20003,
 			"desc":   "Download failed, hash:" + hash,
@@ -98,11 +114,19 @@ func PledgeToken(params []interface{}) map[string]interface{} {
 	if !ok {
 		return map[string]interface{}{
 			"error":  20002,
-			"desc":   "params type is ERROR",
+			"desc":   "params hash is ERROR",
 			"result": "",
 		}
 	}
-	if err := downloader.DoDownload(hash); err != nil {
+	pwd, ok := params[0].(string)
+	if !ok {
+		return map[string]interface{}{
+			"error":  20002,
+			"desc":   "params pwd is ERROR",
+			"result": "",
+		}
+	}
+	if err := downloader.DoDownload(hash, pwd); err != nil {
 		return map[string]interface{}{
 			"error":  20003,
 			"desc":   "Download failed, hash:" + hash,
@@ -131,7 +155,15 @@ func WithdrawToken(params []interface{}) map[string]interface{} {
 			"result": "",
 		}
 	}
-	if err := downloader.DoDownload(hash); err != nil {
+	pwd, ok := params[1].(string)
+	if !ok {
+		return map[string]interface{}{
+			"error":  20002,
+			"desc":   "params pwd is ERROR",
+			"result": "",
+		}
+	}
+	if err := downloader.DoDownload(hash, pwd); err != nil {
 		return map[string]interface{}{
 			"error":  20003,
 			"desc":   "Download failed, hash:" + hash,

@@ -25,7 +25,7 @@ import (
 
 const DefaultKeepaliveInterval = 15 * time.Second
 
-func DoDownload(hash string) error {
+func DoDownload(hash, pwd string) error {
 	if hash == "" {
 		return errors.New("in downloader, param:hash value is empty")
 	}
@@ -34,7 +34,7 @@ func DoDownload(hash string) error {
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
-	auth, err := bind.NewTransactor(strings.NewReader("key"), "123")
+	auth, err := bind.NewTransactor(strings.NewReader(constants.ACCOUNT_KEY), pwd)
 	if err != nil {
 		log.Fatalf("Failed to create authorized transactor: %v", err)
 	}

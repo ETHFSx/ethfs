@@ -5,4 +5,5 @@ const (
 	DEFAULT_WORKSPACE = "~/.nilfs"
 	DEFAULT_IPFS_DIR  = "./.ipfs"
 	CONTRACT_ADDR     = "pdp-contract-address"
+	ACCOUNT_KEY       = ""
 )

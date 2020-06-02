@@ -161,7 +161,7 @@ func ProposeUpload(params *UploadParams) (txid string, err error) {
 	return txid, nil
 }
 
-func DoUpload(hash string, copyNum uint32, amount uint32) error {
+func DoUpload(hash string, copyNum uint32, amount uint32, pwd string) error {
 	if hash == "" || copyNum < 1 {
 		return errors.New("param value is error")
 	}
@@ -170,7 +170,7 @@ func DoUpload(hash string, copyNum uint32, amount uint32) error {
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}
-	auth, err := bind.NewTransactor(strings.NewReader("key"), "123")
+	auth, err := bind.NewTransactor(strings.NewReader(constants.ACCOUNT_KEY), pwd)
 	if err != nil {
 		log.Fatalf("Failed to create authorized transactor: %v", err)
 	}

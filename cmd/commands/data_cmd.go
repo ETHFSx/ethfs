@@ -34,6 +34,7 @@ var DataCommand = cli.Command{
 				utils.PathFlag,
 				utils.CopyNumFlag,
 				utils.AmountFlag,
+				utils.PasswordFlag,
 			},
 		},
 		{
@@ -44,6 +45,7 @@ var DataCommand = cli.Command{
 			Description: "Download data from ethfs network, this maybe need to wait for a moment before beginning loading as for contract to be verified",
 			Flags: []cli.Flag{
 				utils.HashFlag,
+				utils.PasswordFlag,
 			},
 		},
 	},
@@ -53,9 +55,10 @@ func doUpload(ctx *cli.Context) error {
 	path := ctx.String(utils.GetFlagName(utils.PathFlag))
 	copyNum := ctx.Uint(utils.GetFlagName(utils.CopyNumFlag))
 	amount := ctx.Uint(utils.GetFlagName(utils.AmountFlag))
+	password := ctx.String(utils.GetFlagName(utils.PasswordFlag))
 	log.Info("do upload in commands:", path, copyNum, amount)
 	go ipfs.MainStart("daemon")
-	if err := uploader.DoUpload(path, uint32(copyNum), uint32(amount)); err != nil {
+	if err := uploader.DoUpload(path, uint32(copyNum), uint32(amount), password); err != nil {
 		log.Error("upload err:", err, ",path:", path, ",copy number:", copyNum)
 	}
 	return nil
@@ -63,9 +66,10 @@ func doUpload(ctx *cli.Context) error {
 
 func doDownload(ctx *cli.Context) error {
 	hash := ctx.String(utils.GetFlagName(utils.HashFlag))
+	password := ctx.String(utils.GetFlagName(utils.PasswordFlag))
 	log.Info("do download commands:", hash)
 	go ipfs.MainStart("daemon")
-	if err := downloader.DoDownload(hash); err != nil {
+	if err := downloader.DoDownload(hash, password); err != nil {
 		log.Error("download err:", err, " ,hash:", hash)
 	}
 	return nil

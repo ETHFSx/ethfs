@@ -7,7 +7,11 @@
 package commands
 
 import (
+	"strings"
+
 	"github.com/Yihen/ethfs/common/log"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/ethclient"
 
 	"github.com/Yihen/ethfs/common/constants"
 	"github.com/ethereum/go-ethereum/common"
@@ -31,6 +35,7 @@ var TokenCommand = cli.Command{
 			Description: "When node leave the storage network, he can choose to withdraw the ETH token pledge at first.",
 			Flags: []cli.Flag{
 				utils.AmountFlag,
+				utils.PasswordFlag,
 			},
 		},
 		{
@@ -42,6 +47,7 @@ var TokenCommand = cli.Command{
 			Flags: []cli.Flag{
 				utils.AddressFlag,
 				utils.AmountFlag,
+				utils.PasswordFlag,
 			},
 		},
 	},
@@ -49,13 +55,22 @@ var TokenCommand = cli.Command{
 
 func doWithdraw(ctx *cli.Context) error {
 	amount := ctx.Uint(utils.GetFlagName(utils.AmountFlag))
+	password := ctx.String(utils.GetFlagName(utils.PasswordFlag))
 	log.Info("do withdraw in commands:", amount)
-	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), nil)
+	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	if err != nil {
+		log.Fatalf("in withdraw, failed to connect to the Ethereum client: %v", err)
+	}
+	auth, err := bind.NewTransactor(strings.NewReader(constants.ACCOUNT_KEY), password)
+	if err != nil {
+		log.Fatalf("in withdraw, failed to create authorized transactor: %v", err)
+	}
+	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), conn)
 	if err != nil {
 		log.Error("initialize new proof err:", err.Error())
 		return err
 	}
-	tx, err := pdp.NodeLeave(nil)
+	tx, err := pdp.NodeLeave(auth)
 	if err != nil {
 		log.Error("withdraw for node err:", err.Error())
 		return err
@@ -67,13 +82,21 @@ func doWithdraw(ctx *cli.Context) error {
 func doPledge(ctx *cli.Context) error {
 	address := ctx.String(utils.GetFlagName(utils.AddressFlag))
 	amount := ctx.Uint(utils.GetFlagName(utils.AmountFlag))
-
-	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), nil)
+	password := ctx.String(utils.GetFlagName(utils.PasswordFlag))
+	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	if err != nil {
+		log.Fatalf("in pledge, failed to connect to the Ethereum client: %v", err)
+	}
+	auth, err := bind.NewTransactor(strings.NewReader(constants.ACCOUNT_KEY), password)
+	if err != nil {
+		log.Fatalf("in pledge, failed to create authorized transactor: %v", err)
+	}
+	pdp, err := proof.NewProof(common.HexToAddress(constants.CONTRACT_ADDR), conn)
 	if err != nil {
 		log.Error("initialize new proof err:", err.Error())
 		return err
 	}
-	tx, err := pdp.PledgeForNode(nil, uint32(amount), common.HexToAddress(address))
+	tx, err := pdp.PledgeForNode(auth, uint32(amount), common.HexToAddress(address))
 	if err != nil {
 		log.Error("pledge for node err:", err.Error())
 		return err
