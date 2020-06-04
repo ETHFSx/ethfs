@@ -7,7 +7,10 @@ package downloader
 
 import (
 	"context"
+	"crypto/sha1"
 	"errors"
+	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -71,12 +74,34 @@ func DoDownload(hash, pwd string) error {
 				log.Error("in downloader, swarm connect is err:", err.Error())
 				return err
 			}
-			err = sh.Get(hash, "./")
+			err = sh.Get(hash, "./"+hash+".download")
 			if err != nil {
 				log.Error("in downloader, ipfs cat file err:", err.Error())
 				return err
 			} else {
 				log.Error("success to download:", hash)
+			}
+
+			fp, err := os.Open("./" + hash + ".download")
+			if err != nil {
+				return err
+			}
+			fileInfo, err := fp.Stat()
+			if err != nil {
+				return err
+			}
+			buffer := make([]byte, fileInfo.Size())
+			fmt.Println("file.size:", fileInfo.Size())
+			_, err = fp.Read(buffer)
+			if err != nil {
+				return err
+			}
+			Sha1Inst := sha1.New()
+			Sha1Inst.Write(buffer)
+			fileHash := Sha1Inst.Sum([]byte(""))
+			_, err = pdp.PunishOrReward(auth, common.HexToAddress(peerInfo.Addrs[0]), hash, common.Bytes2Hex(fileHash) == hash)
+			if err != nil {
+				return err
 			}
 			break
 		}
