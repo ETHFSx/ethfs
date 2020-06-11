@@ -7,11 +7,12 @@ package handler
 
 import (
 	"github.com/Yihen/ethfs/core/downloader"
+	"github.com/Yihen/ethfs/core/token"
 	"github.com/Yihen/ethfs/core/uploader"
 )
 
 func UploadData(params []interface{}) map[string]interface{} {
-	if len(params) < 2 {
+	if len(params) < 4 {
 		return map[string]interface{}{
 			"error":  20001,
 			"desc":   "params is not enough",
@@ -65,7 +66,7 @@ func UploadData(params []interface{}) map[string]interface{} {
 }
 
 func DownloadData(params []interface{}) map[string]interface{} {
-	if len(params) < 1 {
+	if len(params) < 2 {
 		return map[string]interface{}{
 			"error":  20001,
 			"desc":   "params is not enough",
@@ -103,55 +104,18 @@ func DownloadData(params []interface{}) map[string]interface{} {
 }
 
 func PledgeToken(params []interface{}) map[string]interface{} {
-	if len(params) < 1 {
+	if len(params) < 3 {
 		return map[string]interface{}{
 			"error":  20001,
 			"desc":   "params is not enough",
 			"result": "",
 		}
 	}
-	hash, ok := params[0].(string)
+	amount, ok := params[0].(uint)
 	if !ok {
 		return map[string]interface{}{
 			"error":  20002,
 			"desc":   "params hash is ERROR",
-			"result": "",
-		}
-	}
-	pwd, ok := params[0].(string)
-	if !ok {
-		return map[string]interface{}{
-			"error":  20002,
-			"desc":   "params pwd is ERROR",
-			"result": "",
-		}
-	}
-	if err := downloader.DoDownload(hash, pwd); err != nil {
-		return map[string]interface{}{
-			"error":  20003,
-			"desc":   "Download failed, hash:" + hash,
-			"result": "",
-		}
-	}
-	return map[string]interface{}{
-		"error":  20000,
-		"desc":   "Download success",
-		"result": "",
-	}
-}
-func WithdrawToken(params []interface{}) map[string]interface{} {
-	if len(params) < 1 {
-		return map[string]interface{}{
-			"error":  20001,
-			"desc":   "params is not enough",
-			"result": "",
-		}
-	}
-	hash, ok := params[0].(string)
-	if !ok {
-		return map[string]interface{}{
-			"error":  20002,
-			"desc":   "params type is ERROR",
 			"result": "",
 		}
 	}
@@ -163,16 +127,55 @@ func WithdrawToken(params []interface{}) map[string]interface{} {
 			"result": "",
 		}
 	}
-	if err := downloader.DoDownload(hash, pwd); err != nil {
+
+	address, ok := params[2].(string)
+	if !ok {
+		return map[string]interface{}{
+			"error":  20002,
+			"desc":   "params pwd is ERROR",
+			"result": "",
+		}
+	}
+
+	if err := token.DoPledge(amount, pwd, address); err != nil {
 		return map[string]interface{}{
 			"error":  20003,
-			"desc":   "Download failed, hash:" + hash,
+			"desc":   "pledge failed, address:" + address,
 			"result": "",
 		}
 	}
 	return map[string]interface{}{
 		"error":  20000,
-		"desc":   "Download success",
+		"desc":   "pledge success",
+		"result": "",
+	}
+}
+func WithdrawToken(params []interface{}) map[string]interface{} {
+	if len(params) < 1 {
+		return map[string]interface{}{
+			"error":  20001,
+			"desc":   "params is not enough",
+			"result": "",
+		}
+	}
+	pwd, ok := params[0].(string)
+	if !ok {
+		return map[string]interface{}{
+			"error":  20002,
+			"desc":   "params pwd is ERROR",
+			"result": "",
+		}
+	}
+	if err := token.DoWithdraw(pwd); err != nil {
+		return map[string]interface{}{
+			"error":  20003,
+			"desc":   "do withdraw failed",
+			"result": "",
+		}
+	}
+	return map[string]interface{}{
+		"error":  20000,
+		"desc":   "withdraw success",
 		"result": "",
 	}
 }

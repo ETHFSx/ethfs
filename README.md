@@ -41,9 +41,9 @@ ETHFSX will help a large number of applications and websites that need or even r
 
 
 
-#### Example
+#### Usage
 ```text
-COMING SOON...
+learn more detail in ETHFSx/docs repo
 ```
 
 
