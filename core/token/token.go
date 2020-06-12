@@ -18,7 +18,7 @@ import (
 )
 
 func DoWithdraw(password string) error {
-	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	conn, err := ethclient.Dial(constants.DEFAULT_ETH_WORKSPACE + "geth.ipc")
 	if err != nil {
 		log.Fatalf("in withdraw, failed to connect to the Ethereum client: %v", err)
 	}
@@ -42,7 +42,7 @@ func DoWithdraw(password string) error {
 }
 
 func DoPledge(amount uint, password, address string) error {
-	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	conn, err := ethclient.Dial(constants.DEFAULT_ETH_WORKSPACE + "geth.ipc")
 	if err != nil {
 		log.Fatalf("in pledge, failed to connect to the Ethereum client: %v", err)
 	}

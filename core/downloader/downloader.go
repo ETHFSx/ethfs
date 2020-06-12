@@ -33,7 +33,7 @@ func DoDownload(hash, pwd string) error {
 		return errors.New("in downloader, param:hash value is empty")
 	}
 
-	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	conn, err := ethclient.Dial(constants.DEFAULT_ETH_WORKSPACE + "geth.ipc")
 	if err != nil {
 		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
 	}

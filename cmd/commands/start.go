@@ -56,7 +56,7 @@ func start(ctx *cli.Context) error {
 	if 0 != ipfs.MainStart("daemon") {
 		log.Error("start ipfs node ERROR")
 	}
-	conn, err := ethclient.Dial("~/.ethereum/geth.ipc")
+	conn, err := ethclient.Dial(constants.DEFAULT_ETH_WORKSPACE + "geth.ipc")
 	if err != nil {
 		log.Fatalf("in withdraw, failed to connect to the Ethereum client: %v", err)
 	}
