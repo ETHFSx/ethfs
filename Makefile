@@ -13,6 +13,10 @@ help:          ## Show available options with this Makefile
 build: clean
 	$(GC) -o ./bin/ethfs cmd/node/node.go
 
+.PHONY: build
+win: clean
+	CGO_ENABLED=0  GOOS=windows GOARCH=amd64 $(GC)  -o ./bin/ethfs.exe cmd/node/node.go
+
 .PHONY: glide
 glide:   ## Installs glide for go package management
 	@ mkdir -p $$(go env GOPATH)/bin

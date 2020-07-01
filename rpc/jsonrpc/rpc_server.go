@@ -16,10 +16,15 @@ import (
 func StartRPCServer() error {
 	log.Debug()
 	http.HandleFunc("/", base.Handle)
+	base.HandleFunc("api/v1/user/login", handler.Login)
 	base.HandleFunc("download", handler.DownloadData)
 	base.HandleFunc("upload", handler.UploadData)
-	base.HandleFunc("withdraw", handler.WithdrawToken)
+	base.HandleFunc("quit", handler.WithdrawToken)
 	base.HandleFunc("pledge", handler.PledgeToken)
+	base.HandleFunc("start", handler.NodeStart)
+	base.HandleFunc("stop", handler.NodeStop)
+	base.HandleFunc("get_user_info", handler.GetUserInfo)
+	base.HandleFunc("get_miner_list", handler.GetMinerList)
 	//rpc.HandleFunc("getsysstatusscore", rpc.GetSysStatusScore)
 	err := http.ListenAndServe(config.Parameters.PublicIP+":"+strconv.Itoa(int(config.Parameters.HttpJsonPort)), nil)
 	if err != nil {
