@@ -42,6 +42,8 @@ func setupAPP() *cli.App {
 	app.Commands = []cli.Command{
 		commands.DataCommand,
 		commands.TokenCommand,
+		commands.StartCommand,
+		commands.StopCommand,
 	}
 	app.Flags = []cli.Flag{
 		utils.RPCPortFlag,
@@ -50,6 +52,7 @@ func setupAPP() *cli.App {
 		utils.PathFlag,
 		utils.AddressFlag,
 		utils.AmountFlag,
+		utils.PasswordFlag,
 	}
 	app.Before = func(context *cli.Context) error {
 		runtime.GOMAXPROCS(runtime.NumCPU())

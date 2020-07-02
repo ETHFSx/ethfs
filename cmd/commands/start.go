@@ -9,16 +9,17 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Yihen/ethfs/common/constants"
+	"github.com/ethereum/go-ethereum/ethclient"
+
 	"github.com/ETHFSx/go-ipfs/shell"
 
 	"github.com/Yihen/ethfs/cmd/commands/utils"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/ethclient"
 
 	"github.com/ETHFSx/go-ipfs/shell/ipfs"
 	proof "github.com/Yihen/contracts/dataproof/api"
-	"github.com/Yihen/ethfs/common/constants"
 	"github.com/Yihen/ethfs/common/log"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/urfave/cli"
@@ -34,6 +35,13 @@ var StartCommand = cli.Command{
 	Flags: []cli.Flag{
 		utils.PasswordFlag,
 	}}
+
+var StopCommand = cli.Command{
+	Name:        "start",
+	Usage:       "./ethfs stop",
+	Description: "stop an ethfs node to ",
+	Action:      stop,
+}
 
 const DefaultKeepaliveInterval = 15 * time.Second
 
@@ -86,6 +94,7 @@ func start(ctx *cli.Context) error {
 			}
 		}
 	}()
+	log.Info("start ethfs node mine success")
 	return nil
 }
 
