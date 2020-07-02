@@ -24,6 +24,8 @@ import (
 	"github.com/urfave/cli"
 )
 
+var stopCh chan struct{}
+
 var StartCommand = cli.Command{
 	Name:        "start",
 	Usage:       "./ethfs start",
@@ -78,8 +80,15 @@ func start(ctx *cli.Context) error {
 				if err != doChallengeTask(pdp, auth) {
 					break
 				}
+			case <-stopCh:
+				log.Info("mine ethfs stop.")
+				return
 			}
 		}
 	}()
 	return nil
+}
+
+func stop(ctx *cli.Context) {
+	close(stopCh)
 }
